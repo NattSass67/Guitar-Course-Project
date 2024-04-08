@@ -1,7 +1,7 @@
 {
-  "/page": "app/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/(navbar)/my-courses/page": "app/(navbar)/my-courses/page.js",
+  "/(navbar)/my-courses/[id]/page": "app/(navbar)/my-courses/[id]/page.js",
   "/(navbar)/creator/my-course/page": "app/(navbar)/creator/my-course/page.js",
   "/(navbar)/creator/my-course/[id]/page": "app/(navbar)/creator/my-course/[id]/page.js",
   "/(navbar)/creator/my-course/[id]/upload/page": "app/(navbar)/creator/my-course/[id]/upload/page.js",
