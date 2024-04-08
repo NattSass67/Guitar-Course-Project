@@ -74,7 +74,7 @@ export default function Editor(props: CoursePageProps) {
       <div>
         <p className="font-bold text-2xl text-center mb-4">{data?.title}</p>
         <div className="grid grid-cols-3 ">
-          <div className="flex row-span-2 col-span-3 md:col-span-2 bg-neutral-900 items-center overflow-hidden sm:h-[400px] h-[250px] md:h-[500px]">
+          <div className="flex row-span-2 col-span-3 md:col-span-2 bg-neutral-900 items-center overflow-y-auto sm:h-[400px] h-[250px] md:h-[500px]">
             <VideoPlayer videoURL={videoUrl} />
           </div>
           <div className="row-span-2 md:col-span-1 col-span-2 bg-stone-200 overflow-y-auto sm:h-[400px] h-[250px] md:h-[500px]">

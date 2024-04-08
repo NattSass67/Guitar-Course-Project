@@ -102,7 +102,7 @@ export async function uploadVideo(
       return "";
     }
     try {
-    
+   
       // Make a GET request to your backend API to fetch the video
       const response = await fetch(`${backendUrl}/api/video/creator/${video._id}`, {
         headers: {
@@ -114,9 +114,8 @@ export async function uploadVideo(
         console.error(`Failed to fetch video: ${response.status} ${response.statusText}`);
         return "";
       }
-  
+      
       // Convert the video data to blob
-      console.log(response);
       const videoBlob = await response.blob();
       
       // Create a blob URL from the video data received from the server

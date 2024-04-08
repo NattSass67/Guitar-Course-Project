@@ -5,7 +5,7 @@ const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export async function getAllCourseCreator() {
   try {
-    const response = await fetch("http://localhost:5000/api/creator-course", {
+    const response = await fetch(`${backendUrl}/api/creator-course`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
