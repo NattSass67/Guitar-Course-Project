@@ -4,20 +4,35 @@ const Course = require('../model/Course');
 const User = require("../model/User");
 const middleware = require('../middleware/auth')
 
-router.post('/api/create-course', middleware, (req, res) => {
-    const course = new Course();
-    course.user = req.user._id;
-    course.title = req.body.title;
-    course.description = req.body.description;
+router.post('/api/create-course', middleware, async (req, res) => {
+    try {
+        // Extract data from the request body
+        const { title, description } = req.body;
 
-    course.save().then(savedData => {
-        res.status(200).send(savedData)
-    }).catch(err => {
-        console.log(err);
-        res.send({ success: false });
-    })
+        // Check if required fields are provided
+        if (!title || !description) {
+            return res.status(400).json({ success: false, error: "Title and description are required" });
+        }
 
+        // Create a new Course instance
+        const course = new Course({
+            user: req.user._id,
+            title,
+            description
+        });
+
+        // Save the course to the database
+        const savedCourse = await course.save();
+
+        // Return the saved course as the response
+        res.status(200).json({ success: true, data: savedCourse });
+    } catch (error) {
+        // If an error occurs during course creation, handle it
+        console.error("Error creating course:", error);
+        res.status(500).json({ success: false, error: "Internal Server Error" });
+    }
 });
+
 
 //get all course by Creator's Id
 router.get('/api/creator-course', middleware, (req, res) => {
@@ -30,26 +45,31 @@ router.get('/api/creator-course', middleware, (req, res) => {
 })
 
 
-//get course by Id Creator
 router.get('/api/creator-course/:id', middleware, async (req, res) => {
-    const course = await Course.findById(req.params.id);
-    if (!course) {
-        return res.status(404).json({ success: false, error: "Course not found" });
-    }
-    // console.log(course.user);
-    //console.log(req.user._id);
-    if (course.user.toString() !== req.user._id.toString() || !req.user.creator) {
-        return res.status(401).json({ success: false, message: `User ${req.user._id} is not authorized to get Course` });
-    }
+    try {
+        // Find the course by its ID
+        const course = await Course.findById(req.params.id);
+        if (!course) {
+            return res.status(404).json({ success: false, error: "Course not found" });
+        }
 
-    Course.find({ _id: req.params.id }).populate('videos').then(data => {
-        console.log(data[0])
-        res.status(200).send(data[0]);
-    }).catch(err => {
-        console.log(err);
-        res.status(400).send({ success: false });
-    })
-})
+        // Check if the user is authorized to access the course
+        if (course.user.toString() !== req.user._id.toString() || !req.user.creator) {
+            return res.status(401).json({ success: false, message: `User ${req.user._id} is not authorized to get Course` });
+        }
+
+        // Populate the 'videos' field of the course
+        const populatedCourse = await Course.findById(req.params.id).populate('videos');
+
+        // Send the populated course data in the response
+        res.status(200).json(populatedCourse);
+    } catch (error) {
+        // If an error occurs during course retrieval, handle it
+        console.error("Error getting course by ID:", error);
+        res.status(500).json({ success: false, error: "Internal Server Error" });
+    }
+});
+
 
 
 router.get('/api/learner-course/:id', middleware, async (req, res) => {
