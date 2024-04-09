@@ -1,1 +1,2 @@
-"# Guitar-Course-Project" 
+Please check my presentation and improvements below..
+
